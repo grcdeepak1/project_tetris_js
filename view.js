@@ -2,26 +2,23 @@ var TT = TT || {};
 
 TT.View = (function() {
 
-  var render = function() {
+  // Private Methods
+  var _render = function() {
      $.each(TT.Model.getBoard(), function(i, col) {
        $.each(col, function(j, row) {
-        renderBlock(i,j);
+        _renderBlock(i,j);
        })
      })
   }
 
-  var renderBlock = function(i, j) {
+  var _renderBlock = function(i, j) {
     if (TT.Model.getBoard()[i][j] === 1) {
       $('#c_'+i+'_'+j).addClass('block');
     }
 
   }
 
-  var removeCanClear = function(i, j) {
-    $('#c_'+i+'_'+j).removeClass('canClear');
-  }
-
-  var resetBoard = function() {
+  var _resetBoard = function() {
     $('.cell.canClear').removeClass('block')
   }
 
@@ -34,13 +31,31 @@ TT.View = (function() {
     }
   }
 
+  var _dirctionKeyListener = function() {
+    $(document).keydown(function(e){
+      if (e.keyCode == 37) {
+         TT.Model.moveBlockLeft();
+      } else if (e.keyCode == 39) {
+         TT.Model.moveBlockRight();
+      } else if (e.keyCode == 40) {
+         TT.Model.moveBlockDown();
+      }
+    });
+  }
+
+  // Public Methods
+  var removeCanClear = function(i, j) {
+    $('#c_'+i+'_'+j).removeClass('canClear');
+  }
+
   var tic = function() {
-    resetBoard();
-    render();
+    _resetBoard();
+    _render();
   }
 
   var init = function() {
     _createCells();
+    _dirctionKeyListener();
   }
 
   return {
