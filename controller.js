@@ -16,7 +16,7 @@ TT.Controller = (function() {
         TT.Model.tic();
         _startGameLoop();
     }, _gameLoopTime);
-    console.log("settimeout"+_gameLoop);
+    // console.log("settimeout"+_gameLoop);
   }
 
   var setGameLoopTime = function(time) {
@@ -28,7 +28,7 @@ TT.Controller = (function() {
   }
 
   var gameOver = function(){
-    console.log("clear timeout"+_gameLoop);
+    // console.log("clear timeout"+_gameLoop);
     clearTimeout(_gameLoop);
     alert("Game Over!");
   }

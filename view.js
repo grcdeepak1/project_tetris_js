@@ -4,9 +4,9 @@ TT.View = (function() {
 
   // Private Methods
   var _render = function() {
-     $.each(TT.Model.getBoard(), function(i, col) {
-       $.each(col, function(j, row) {
-        _renderBlock(i,j);
+     $.each(TT.Model.getBoard(), function(i, row) {
+       $.each(row, function(j, col) {
+        _renderBlock(i, j);
        })
      })
   }
@@ -26,7 +26,7 @@ TT.View = (function() {
     $('#div_main').html("");
     for (var r=0 ; r<20 ; r++) {
       for (var c=0; c<10 ; c++) {
-        $('#div_main').append('<div class="cell canClear" id=c_'+c+'_'+r+'></div>');
+        $('#div_main').append('<div class="cell canClear" id=c_'+r+'_'+c+'></div>');
       }
     }
   }
