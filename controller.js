@@ -1,21 +1,29 @@
 var TT = TT || {};
 
 TT.Controller = (function() {
-  function init() {
+  var _gameLoop;
+
+  var init = function() {
     TT.Model.init();
     TT.View.init();
     _startGame();
   }
 
-  function _startGame() {
-    gameLoop = setInterval( function(){
+  var _startGame = function(){
+    _gameLoop = setInterval( function(){
       TT.View.tic();
       TT.Model.tic();
-    }, 1000);
+    }, 10);
+  }
+
+  var gameOver = function(){
+    clearInterval(_gameLoop);
+    alert("Game Over!");
   }
 
   return {
-    init: init
+    init: init,
+    gameOver: gameOver,
   }
 
 })();
