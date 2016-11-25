@@ -13,7 +13,7 @@ TT.View = (function() {
 
   var _renderBlock = function(i, j) {
     if (TT.Model.getBoard()[i][j] === 1) {
-      $('#c_'+i+'_'+j).addClass('block');
+      $($($('.row')[i]).children()[j]).addClass("block");
     }
 
   }
@@ -22,11 +22,16 @@ TT.View = (function() {
     $('.cell.canClear').removeClass('block')
   }
 
+  var resetRow = function(row) {
+    $($('.row')[row]).children().removeClass('block').addClass('canClear');
+  }
+
   var _createCells = function() {
     $('#div_main').html("");
     for (var r=0 ; r<20 ; r++) {
+      $('#div_main').append('<div class="row">');
       for (var c=0; c<10 ; c++) {
-        $('#div_main').append('<div class="cell canClear" id=c_'+r+'_'+c+'></div>');
+        $($('.row')[r]).append('<div class="cell canClear"></div>');
       }
     }
   }
@@ -45,7 +50,7 @@ TT.View = (function() {
 
   // Public Methods
   var removeCanClear = function(i, j) {
-    $('#c_'+i+'_'+j).removeClass('canClear');
+    $($($('.row')[i]).children()[j]).removeClass("canClear");
   }
 
   var tic = function() {
@@ -61,6 +66,7 @@ TT.View = (function() {
   return {
     init: init,
     tic: tic,
-    removeCanClear: removeCanClear
+    removeCanClear: removeCanClear,
+    resetRow: resetRow
   }
 })();

@@ -15,7 +15,7 @@ TT.Model = (function() {
   }
 
   var _generateBlock = function() {
-    _col = 1;
+    _col = Math.floor(Math.random() * 10);
     _row = 0;
     if (_board[_row][_col] === 1) {
       TT.Controller.gameOver();
@@ -38,10 +38,20 @@ TT.Model = (function() {
     }
   }
 
-  var isRowComplete = function() {
-
+  var _collapseRow = function(row) {
+    _board.splice(row, 1);
+    _board.splice(0, 0, new Uint8Array(10));
+    TT.View.resetRow(row);
   }
 
+  var isRowComplete = function() {
+    for(var r = 0; r < 20; r++) {
+      var sum = _board[r].reduce(function(a, b) {return a+b;})
+      if (sum === 2) {
+        _collapseRow(r);
+      }
+    }
+  }
 
   var moveBlockDown = function() {
     TT.Controller.setGameLoopTime(10);
