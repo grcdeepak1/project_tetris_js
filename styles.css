@@ -1,6 +1,6 @@
 #div_main {
   width: 200px;
-  height: 400px;
+  height: 480px;
   background-color: #ccc;
   display: inline-block;
   margin-left: 200px;
@@ -17,4 +17,8 @@
   width: 20px;
   height: 20px;
   float: left;
+}
+
+.hidden {
+  background: white;
 }

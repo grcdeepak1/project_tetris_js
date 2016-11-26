@@ -2,7 +2,8 @@ var TT = TT || {};
 
 TT.Controller = (function() {
   var _gameLoop;
-  var _gameLoopTime = 1000;
+  var _defaultGameLoopTime = 100;
+  var _gameLoopTime = _defaultGameLoopTime;
 
   var init = function() {
     TT.Model.init();
@@ -14,9 +15,10 @@ TT.Controller = (function() {
     _gameLoop = setTimeout(function () {
         TT.View.tic();
         TT.Model.tic();
+        gameOver();
         _startGameLoop();
     }, _gameLoopTime);
-    // console.log("settimeout"+_gameLoop);
+    console.log("set timeout"+_gameLoop);
   }
 
   var setGameLoopTime = function(time) {
@@ -24,20 +26,25 @@ TT.Controller = (function() {
   }
 
   var resetGameLoopTime = function() {
-    _gameLoopTime = 1000;
+    _gameLoopTime = _defaultGameLoopTime;
   }
 
-  var gameOver = function(){
-    // console.log("clear timeout"+_gameLoop);
+  var stopGameLoop = function(){
+    console.log("clear timeout"+_gameLoop);
     clearTimeout(_gameLoop);
-    alert("Game Over!");
+  }
+
+  var gameOver = function() {
+    if (TT.View.isGameOver()) {
+      stopGameLoop();
+      alert("GameOver");
+    }
   }
 
   return {
     init: init,
-    gameOver: gameOver,
     setGameLoopTime: setGameLoopTime,
-    resetGameLoopTime: resetGameLoopTime
+    resetGameLoopTime: resetGameLoopTime,
   }
 
 })();

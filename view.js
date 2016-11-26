@@ -1,7 +1,8 @@
 var TT = TT || {};
 
 TT.View = (function() {
-
+  var MAX_ROWS = 24;
+  var MAX_COLS = 10;
   // Private Methods
   var _render = function() {
      $.each(TT.Model.getBoard(), function(i, row) {
@@ -23,15 +24,20 @@ TT.View = (function() {
   }
 
   var resetRow = function(row) {
-    $($('.row')[row]).children().removeClass('block').addClass('canClear');
+    $($('.row')[row]).remove();
+    $('#div_main').prepend($($('.row')[0]).clone());
   }
 
   var _createCells = function() {
     $('#div_main').html("");
-    for (var r=0 ; r<20 ; r++) {
+    for (var r=0 ; r<MAX_ROWS ; r++) {
       $('#div_main').append('<div class="row">');
-      for (var c=0; c<10 ; c++) {
-        $($('.row')[r]).append('<div class="cell canClear"></div>');
+      for (var c=0; c<MAX_COLS ; c++) {
+        if (r < 5) {
+          $($('.row')[r]).append('<div class="cell canClear hidden"></div>');
+        } else {
+          $($('.row')[r]).append('<div class="cell canClear"></div>');
+        }
       }
     }
   }
@@ -63,10 +69,19 @@ TT.View = (function() {
     _dirctionKeyListener();
   }
 
+  var isGameOver = function() {
+    if ($($('.row')[0]).find('.canClear').length < MAX_COLS) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   return {
     init: init,
     tic: tic,
     removeCanClear: removeCanClear,
-    resetRow: resetRow
+    resetRow: resetRow,
+    isGameOver: isGameOver
   }
 })();
