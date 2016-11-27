@@ -2,8 +2,9 @@ var TT = TT || {};
 
 TT.Controller = (function() {
   var _gameLoop;
-  var _defaultGameLoopTime = 1000;
+  var _defaultGameLoopTime = 300;
   var _gameLoopTime = _defaultGameLoopTime;
+  var score = 0;
 
   var init = function() {
     TT.Model.init();

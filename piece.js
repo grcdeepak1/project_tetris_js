@@ -9,27 +9,61 @@ TT.PieceModule = (function(Model) {
   function Piece(type){
 
     var i = TT.Model.getRandomInt(0, MAX_COLS-4);
+    this.type = type;
     switch(type) {
       case "square":
-        this.coords = [[0, 1], [0, 2], [1, 1], [1, 2]];
+        this.coords = [[0, 0], [0, 1], [1, 0], [1, 1]];
+        this.orientationIdx = 0;
+        this.masterCoords = [[[0, 0], [0, 1], [1, 0], [1, 1]]];
         break;
       case "4-bar":
-        this.coords = [[0, 1], [0, 2], [0, 3], [0, 4]];
+        this.coords = [[0, 0], [0, 1], [0, 2], [0, 3]];
+        this.orientationIdx = 0;
+        this.masterCoords = [[[0, 0], [0, 1], [0, 2], [0, 3]],
+                              [[0, 0], [1, 0], [2, 0], [3, 0]]];
         break;
       case "l-shape-left":
-        this.coords = [[0, 1], [1, 1], [1, 2], [1, 3]];
+        this.coords = [[0, 0], [1, 0], [1, 1], [1, 2]];
+        this.orientationIdx = 0;
+        this.masterCoords = [[[0, 0], [1, 0], [1, 1], [1, 2]],
+                             [[0, 0], [0, 1], [1, 0], [2, 0]],
+                             [[0, 0], [0, 1], [0, 2], [1, 2]],
+                             [[2, 0], [2, 1], [1, 1], [0, 1]]];
         break;
       case "l-shape-right":
-        this.coords = [[1, 1], [1, 2], [1, 3], [0, 3]];
+        this.coords = [[1, 0], [1, 1], [1, 2], [0, 2]];
+        this.orientationIdx = 0;
+        this.masterCoords = [[[1, 0], [1, 1], [1, 2], [0, 2]],
+                             [[0, 0], [1, 0], [2, 0], [2, 1]],
+                             [[0, 0], [0, 1], [0, 2], [1, 0]],
+                             [[0, 0], [0, 1], [1, 1], [2, 1]]];
         break;
       case "single":
       default:
         this.coords = [[0, 1]];
+        this.orientationIdx = 0;
+        this.masterCoords = [[[0, 1]]];
         break;
     }
     this.coords.forEach( function(coord) {
       coord[1] += i;
     })
+  }
+
+  Piece.prototype.pos = function() {
+    return this.coords[0];
+  }
+
+  Piece.prototype.rotate = function() {
+    var pos = this.pos();
+    if (pos[0] >= 21) return;
+    this.orientationIdx = (1 + this.orientationIdx) % this.masterCoords.length;
+    var rotated_coords = $.extend(true, [], this.masterCoords[this.orientationIdx]);
+    rotated_coords.forEach( function(coord) {
+      coord[0] += pos[0];
+      coord[1] += pos[1];
+    })
+    this.coords = rotated_coords;
   }
 
   Piece.prototype.move = function() {

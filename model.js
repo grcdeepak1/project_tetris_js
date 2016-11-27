@@ -69,6 +69,10 @@ TT.Model = (function() {
     _piece.moveRight(_board);
   }
 
+  var rotatePiece = function() {
+    _piece.rotate();
+  }
+
   // Public Methods
   var init = function() {
     _createBoard();
@@ -112,6 +116,7 @@ TT.Model = (function() {
     movePieceLeft: movePieceLeft,
     movePieceRight: movePieceRight,
     movePieceDown: movePieceDown,
+    rotatePiece: rotatePiece,
     isGameOver: isGameOver,
     clearBoard: clearBoard,
     getRandomInt: getRandomInt,

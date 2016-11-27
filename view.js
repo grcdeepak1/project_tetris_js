@@ -51,6 +51,8 @@ TT.View = (function() {
          TT.Model.movePieceRight();
       } else if (e.keyCode == 40) {
          TT.Model.movePieceDown();
+      } else if (e.keyCode == 38) {
+        TT.Model.rotatePiece();
       }
     });
   }
