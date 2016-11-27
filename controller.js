@@ -16,10 +16,8 @@ TT.Controller = (function() {
     _gameLoop = setTimeout(function () {
         TT.View.tic();
         TT.Model.tic();
-        gameOver();
-        _startGameLoop();
+        if (!gameOver()) _startGameLoop();
     }, _gameLoopTime);
-    // console.log("set timeout"+_gameLoop);
   }
 
   var setGameLoopTime = function(time) {
@@ -30,15 +28,11 @@ TT.Controller = (function() {
     _gameLoopTime = _defaultGameLoopTime;
   }
 
-  var stopGameLoop = function(){
-    // console.log("clear timeout"+_gameLoop);
-    clearTimeout(_gameLoop);
-  }
-
   var gameOver = function() {
     if (TT.Model.isGameOver()) {
       stopGameLoop();
       alert("GameOver");
+      return true;
     }
   }
 
