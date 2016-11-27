@@ -6,8 +6,7 @@ TT.Model = (function() {
   var MAX_COLS = 10;
   var _board;
   var _piece;
-  var _col;
-  var _row;
+  var _pieceTypes = ["single", "square", "l-shape-left", "l-shape-right", "4-bar"];
 
   // Private Methods
   var _createBoard = function() {
@@ -17,7 +16,7 @@ TT.Model = (function() {
     }
   }
 
-  var _clearBoard = function() {
+  var clearBoard = function() {
     for(var i = 0; i < _board.length; i++) {
       for(var j = 0; j < _board[i].length; j++) {
         if (_board[i][j] === 1) _board[i][j] = 0;
@@ -26,7 +25,8 @@ TT.Model = (function() {
   }
 
   var _generatePiece = function() {
-    _piece = new TT.PieceModule.Piece("single");
+    var random = _pieceTypes[Math.floor(Math.random() * _pieceTypes.length)];
+    _piece = new TT.PieceModule.Piece(random);
     _applyPiece(_board, _piece);
   }
 
@@ -76,8 +76,9 @@ TT.Model = (function() {
   }
 
   var tic = function() {
-    _clearBoard();
-    if (_piece.move() === false) {
+    clearBoard();
+    var op = _piece.move();
+    if (op === false) {
       _applyPiecePerm(_board, _piece);
       _isRowComplete();
       TT.Controller.resetGameLoopTime();
@@ -90,13 +91,30 @@ TT.Model = (function() {
     return _board;
   }
 
+  var isGameOver = function() {
+    if ($.inArray( 2, _board[5]) !== -1) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  var getRandomInt = function(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min)) + min;
+  }
+
   return {
     init: init,
     getBoard: getBoard,
     tic: tic,
     movePieceLeft: movePieceLeft,
     movePieceRight: movePieceRight,
-    movePieceDown: movePieceDown
+    movePieceDown: movePieceDown,
+    isGameOver: isGameOver,
+    clearBoard: clearBoard,
+    getRandomInt: getRandomInt,
   }
 })();
 

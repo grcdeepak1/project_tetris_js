@@ -20,7 +20,7 @@ TT.View = (function() {
   }
 
   var _resetBoard = function() {
-    $('.cell.canClear').removeClass('block')
+    $('.cell').removeClass('block')
   }
 
   var resetRow = function(row) {
@@ -35,9 +35,9 @@ TT.View = (function() {
       $('#div_main').append('<div class="row">');
       for (var c=0; c<MAX_COLS ; c++) {
         if (r < 5) {
-          $($('.row')[r]).append('<div class="cell canClear hidden"></div>');
+          $($('.row')[r]).append('<div class="cell hidden"></div>');
         } else {
-          $($('.row')[r]).append('<div class="cell canClear"></div>');
+          $($('.row')[r]).append('<div class="cell"></div>');
         }
       }
     }
@@ -56,10 +56,6 @@ TT.View = (function() {
   }
 
   // Public Methods
-  var removeCanClear = function(i, j) {
-    $($($('.row')[i]).children()[j]).removeClass("canClear");
-  }
-
   var tic = function() {
     _resetBoard();
     _render();
@@ -70,19 +66,9 @@ TT.View = (function() {
     _dirctionKeyListener();
   }
 
-  var isGameOver = function() {
-    if ($($('.row')[0]).find('.canClear').length < MAX_COLS) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   return {
     init: init,
     tic: tic,
-    removeCanClear: removeCanClear,
     resetRow: resetRow,
-    isGameOver: isGameOver
   }
 })();
