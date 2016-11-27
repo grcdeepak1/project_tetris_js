@@ -57,6 +57,12 @@ TT.View = (function() {
     });
   }
 
+  var _newGameListener = function() {
+    $('#start-game').on('click', function() {
+      location.reload();
+    })
+  }
+
   // Public Methods
   var tic = function() {
     _resetBoard();
@@ -66,11 +72,17 @@ TT.View = (function() {
   var init = function() {
     _createCells();
     _dirctionKeyListener();
+    _newGameListener();
+  }
+
+  var renderScore = function(score) {
+    $('#score').html(score);
   }
 
   return {
     init: init,
     tic: tic,
     resetRow: resetRow,
+    renderScore: renderScore,
   }
 })();

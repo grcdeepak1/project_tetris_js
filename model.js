@@ -46,6 +46,7 @@ TT.Model = (function() {
     _board.splice(row, 1);
     _board.splice(0, 0, new Uint8Array(MAX_COLS));
     TT.View.resetRow(row);
+    TT.Controller.incrScore();
   }
 
   var _isRowComplete = function() {

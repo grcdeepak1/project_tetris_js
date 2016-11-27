@@ -42,10 +42,28 @@ TT.Controller = (function() {
     }
   }
 
+  var newGame = function() {
+    clearTimeout(_gameLoop);
+    resetScore();
+    init();
+  }
+
+  var incrScore = function() {
+    score += 10;
+    TT.View.renderScore(score);
+  }
+
+  var resetScore = function() {
+    score = 0;
+    TT.View.renderScore(score);
+  }
+
   return {
     init: init,
     setGameLoopTime: setGameLoopTime,
     resetGameLoopTime: resetGameLoopTime,
+    incrScore: incrScore,
+    newGame: newGame,
   }
 
 })();
