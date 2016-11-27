@@ -13,7 +13,7 @@ TT.View = (function() {
   }
 
   var _renderBlock = function(i, j) {
-    if (TT.Model.getBoard()[i][j] === 1) {
+    if (TT.Model.getBoard()[i][j] === 1 || TT.Model.getBoard()[i][j] === 2) {
       $($($('.row')[i]).children()[j]).addClass("block");
     }
 
@@ -25,7 +25,8 @@ TT.View = (function() {
 
   var resetRow = function(row) {
     $($('.row')[row]).remove();
-    $('#div_main').prepend($($('.row')[0]).clone());
+    var newRow = $($('.row')[5]).clone();
+    newRow.insertAfter($($('.row')[5]))
   }
 
   var _createCells = function() {
@@ -45,11 +46,11 @@ TT.View = (function() {
   var _dirctionKeyListener = function() {
     $(document).keydown(function(e){
       if (e.keyCode == 37) {
-         TT.Model.moveBlockLeft();
+         TT.Model.movePieceLeft();
       } else if (e.keyCode == 39) {
-         TT.Model.moveBlockRight();
+         TT.Model.movePieceRight();
       } else if (e.keyCode == 40) {
-         TT.Model.moveBlockDown();
+         TT.Model.movePieceDown();
       }
     });
   }

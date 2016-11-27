@@ -5,6 +5,7 @@ TT.Model = (function() {
   var MAX_ROWS = 24;
   var MAX_COLS = 10;
   var _board;
+  var _piece;
   var _col;
   var _row;
 
@@ -16,27 +17,29 @@ TT.Model = (function() {
     }
   }
 
-  var _generateBlock = function() {
-    // _col = Math.floor(Math.random() * MAX_COLS);
-    _col = 2;
-    _row = 0;
-    if (_board[_row][_col] !== 1) {
-      _board[_row][_col] = 1;
+  var _clearBoard = function() {
+    for(var i = 0; i < _board.length; i++) {
+      for(var j = 0; j < _board[i].length; j++) {
+        if (_board[i][j] === 1) _board[i][j] = 0;
+      }
     }
   }
 
-  var _moveBlock = function() {
-    _board[_row][_col] = 0;
-    _row += 1;
-    if (_row === MAX_ROWS || _board[_row][_col] === 1 ) {
-      TT.View.removeCanClear(_row-1, _col);
-      _board[_row - 1][_col] = 1;
-      isRowComplete();
-      return false;
-    } else {
-      _board[_row][_col] = 1;
-      return true;
-    }
+  var _generatePiece = function() {
+    _piece = new TT.PieceModule.Piece("single");
+    _applyPiece(_board, _piece);
+  }
+
+  var _applyPiecePerm = function(_board, _piece) {
+    _piece.coords.forEach(function(coord) {
+       _board[coord[0]][coord[1]] = 2;
+    });
+  }
+
+  var _applyPiece = function(_board, _piece) {
+    _piece.coords.forEach(function(coord) {
+       _board[coord[0]][coord[1]] = 1;
+    });
   }
 
   var _collapseRow = function(row) {
@@ -45,42 +48,42 @@ TT.Model = (function() {
     TT.View.resetRow(row);
   }
 
-  var isRowComplete = function() {
+  var _isRowComplete = function() {
     for(var r = 0; r < MAX_ROWS; r++) {
       var sum = _board[r].reduce(function(a, b) {return a+b;})
-      if (sum === MAX_COLS) {
+      if (sum === MAX_COLS * 2) {
         _collapseRow(r);
       }
     }
   }
 
-  var moveBlockDown = function() {
+  var movePieceDown = function() {
     TT.Controller.setGameLoopTime(10);
   }
 
-  var moveBlockLeft = function() {
-    _board[_row][_col] = 0;
-    if ((_col -= 1) < 0) _col = 0;
-    _board[_row][_col] = 1;
+  var movePieceLeft = function() {
+    _piece.moveLeft(_board);
   }
 
-  var moveBlockRight = function() {
-    _board[_row][_col] = 0;
-    if ((_col += 1) > MAX_COLS-1) _col = MAX_COLS-1;
-    _board[_row][_col] = 1;
+  var movePieceRight = function() {
+    _piece.moveRight(_board);
   }
 
   // Public Methods
   var init = function() {
     _createBoard();
-    _generateBlock();
+    _generatePiece();
   }
 
   var tic = function() {
-    if (_moveBlock() === false) {
-        TT.Controller.resetGameLoopTime();
-        _generateBlock();
+    _clearBoard();
+    if (_piece.move() === false) {
+      _applyPiecePerm(_board, _piece);
+      _isRowComplete();
+      TT.Controller.resetGameLoopTime();
+      _generatePiece();
     }
+    _applyPiece(_board, _piece);
   }
 
   var getBoard = function() {
@@ -91,9 +94,9 @@ TT.Model = (function() {
     init: init,
     getBoard: getBoard,
     tic: tic,
-    moveBlockLeft: moveBlockLeft,
-    moveBlockRight: moveBlockRight,
-    moveBlockDown: moveBlockDown
+    movePieceLeft: movePieceLeft,
+    movePieceRight: movePieceRight,
+    movePieceDown: movePieceDown
   }
 })();
 
